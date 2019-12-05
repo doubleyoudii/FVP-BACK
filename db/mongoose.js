@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose.Promise = global.Promise;
 mongoose
-  .connect("mongodb://localhost:27017/TaskManager", { useNewUrlParser: true })
+  .connect(process.env.MONGODB_URI, { useNewUrlParser: true })
   .then(() => {
     console.log("Connected to MongoDB successfully :)");
   })
@@ -14,6 +14,7 @@ mongoose
 // To prevent deprectation warnings (from MongoDB native driver)
 mongoose.set("useCreateIndex", true);
 mongoose.set("useFindAndModify", false);
+mongoose.set("useUnifiedTopology", true);
 
 module.exports = {
   mongoose
