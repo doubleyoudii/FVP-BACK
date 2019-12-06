@@ -11,23 +11,31 @@ router.post("/login", async (req, res) => {
     const token = await admin.generateAuthToken();
     res.header("x-auth", token).json("Bearer " + token);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).json({
+      message: "Unable to find Admin User",
+      error: error
+    });
+  }
+});
+
+router.post("/createAdmin", async (req, res) => {
+  try {
+    const body = _.pick(req.body, ["userName", "password"]);
+    const admin = new Admin({
+      userName: body.userName,
+      password: body.password
+    });
+
+    const registered = await admin.save();
+    res.status(200).json({
+      message: "Admin Creation success"
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Unable to create admin",
+      error: error
+    });
   }
 });
 
 module.exports = router;
-
-//const admin = new Admin({
-//   userName: req.body.userName,
-//   password: req.body.password
-// });
-
-// admin
-//   .save()
-//   .then(doc => {
-//     console.log(doc);
-//     res.send(doc);
-//   })
-//   .catch(err => {
-//     console.log(err);
-//   });

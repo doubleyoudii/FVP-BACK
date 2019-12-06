@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 
 const AdminSchema = new Schema({
-  username: {
+  userName: {
     type: String
   },
   password: {
@@ -15,9 +15,9 @@ const AdminSchema = new Schema({
 
 // *** Instance methods ***
 
-AdminSchema.statics.findByCredentials = function(username, password) {
+AdminSchema.statics.findByCredentials = function(userName, password) {
   let Admin = this;
-  return Admin.findOne({ username }).then(user => {
+  return Admin.findOne({ userName }).then(user => {
     if (!user) {
       return Promise.reject();
     }
@@ -36,7 +36,7 @@ AdminSchema.methods.generateAuthToken = function() {
   var admin = this;
 
   const payload = {
-    email: admin.username,
+    email: admin.userName,
     password: admin.password
   };
 
