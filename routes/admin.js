@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
 
-const { Admin, Powercard } = require("../db/models/index");
+const { Admin } = require("../db/models/index");
 
 router.post("/login", async (req, res) => {
   try {
     const body = _.pick(req.body, ["userName", "password"]);
     const admin = await Admin.findByCredentials(body.userName, body.password);
     const token = await admin.generateAuthToken();
-    res.header("x-auth", token).json("Bearer " + token);
+    res.header("x-auth", token).json({ token: "Bearer " + token });
   } catch (error) {
     res.status(400).json({
       message: "Unable to find Admin User",

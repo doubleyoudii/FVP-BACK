@@ -7,6 +7,7 @@ const mongoose = require("./db/mongoose");
 const app = express();
 
 const admin = require("./routes/admin");
+const powercard = require("./routes/powerCard");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/admin", admin);
+app.use("/powercard", powercard);
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
