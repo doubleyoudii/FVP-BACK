@@ -28,7 +28,10 @@ router.post("/create", async (req, res) => {
 router.get("/list", async (req, res) => {
   try {
     const powerCardList = await Powercard.find();
-    res.status(200).json(powerCardList);
+    res.status(200).json({
+      message: "Get List success",
+      data: powerCardList
+    });
   } catch (error) {
     res.status(400).json({
       message: "Cannot Retrieve power card Lists"
@@ -47,7 +50,10 @@ router.get("/list/:id", async (req, res) => {
       });
       return;
     }
-    res.status(200).json(specificCard);
+    res.status(200).json({
+      message: "Get List/id success",
+      data: specificCard
+    });
   } catch (error) {
     res.status(400).json({
       message: "Cannot Find that card"
