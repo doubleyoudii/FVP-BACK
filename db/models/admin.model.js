@@ -40,7 +40,8 @@ AdminSchema.methods.generateAuthToken = function() {
     password: admin.password
   };
 
-  const token = jwt.sign(payload, "testkey").toString();
+  // const token = jwt.sign(payload, "testkey").toString();
+  const token = jwt.sign(payload, process.env.JWT_SALT, { expiresIn: "1h" });
   return token;
 };
 

@@ -9,7 +9,7 @@ router.post("/login", async (req, res) => {
     const body = _.pick(req.body, ["userName", "password"]);
     const admin = await Admin.findByCredentials(body.userName, body.password);
     const token = await admin.generateAuthToken();
-    res.header("x-auth", token).json({ token: "Bearer " + token });
+    res.header("authorization", token).json({ token: "Bearer " + token });
   } catch (error) {
     res.status(400).json({
       message: "Unable to find Admin User",

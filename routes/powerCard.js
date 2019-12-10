@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
+const { authenticate } = require("../middleware/authentication");
 
 const { Powercard } = require("../db/models/index");
 
-router.post("/create", async (req, res) => {
+router.post("/create", authenticate, async (req, res) => {
   const precard = _.pick(req.body, ["key_id", "pin"]);
 
   try {
@@ -25,7 +26,7 @@ router.post("/create", async (req, res) => {
   }
 });
 
-router.get("/list", async (req, res) => {
+router.get("/list", authenticate, async (req, res) => {
   try {
     const powerCardList = await Powercard.find();
     res.status(200).json({
@@ -39,7 +40,7 @@ router.get("/list", async (req, res) => {
   }
 });
 
-router.get("/list/:id", async (req, res) => {
+router.get("/list/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   try {
     const specificCard = await Powercard.findById(id);
@@ -61,7 +62,7 @@ router.get("/list/:id", async (req, res) => {
   }
 });
 
-router.post("/edit/:id", async (req, res) => {
+router.post("/edit/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   const body = _.pick(req.body, [
     "key_id",
@@ -99,7 +100,7 @@ router.post("/edit/:id", async (req, res) => {
   }
 });
 
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", authenticate, async (req, res) => {
   const id = req.params.id;
 
   try {
