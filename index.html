@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="/api/images" method="post" enctype="multipart/form-data">
+      <input type="file" name="image" />
+    </form>
+
+    <br /><br />
+    <!--  SINGLE FILE -->
+    <form action="/uploadfile" enctype="multipart/form-data" method="POST">
+      <input type="file" name="myFile" />
+      <input type="submit" value="Upload a file" />
+    </form>
+
+    <!-- MULTIPLE FILES -->
+
+    <form action="/uploadmultiple" enctype="multipart/form-data" method="POST">
+      Select images: <input type="file" name="myFiles" multiple />
+      <input type="submit" value="Upload your files" />
+    </form>
+
+    <!--   PHOTO-->
+
+    <form action="/uploadphoto" enctype="multipart/form-data" method="POST">
+      <input type="file" name="myImage" accept="image/*" />
+      <input type="submit" value="Upload Photo" />
+      <input type="text" />
+    </form>
+  </body>
+</html>

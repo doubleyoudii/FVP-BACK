@@ -1,0 +1,113 @@
+Sample Project Plan!!!!!!
+1. Concept And Initiation
+	• Describe the idea behind the Project and how it Benefits the Organization.
+	• Explore and Identify how it can be completed.
+	• Plan how to meet those demands.
+
+2. Definition of Planning
+	• Identify the Project Scope.
+	• Outline the Work that need to be performed.
+	• Priorized task
+		•List your task in order of IMPORTANCE
+	• Calculate Budget and Schedule
+
+3. Launch
+	•Execute the plan you devised
+	• Allocate Resources and Task to your team.
+	• Prepare for the changes in plan. Adjust!
+
+4. Performance and Control
+	
+5. Close
+
+
+
+Drill Down into details
+	Break up the Project into parts that make up its life cycle
+
+1. Make a Task list
+	•Create detailed list determining every step along the way of the project
+
+2. Duration 
+	•Figure out how log each of them will take to complete.
+
+3. Dependencies
+	•Know which task are dependent on one another
+	• Link them so you and the team are aware of the importance of completing one 		before starting the other.
+
+4. Resources
+	• Decide what resource you need to accomplish
+
+
+``````````````````````````````````````````````````````````````````````````````````````
+
+
+Steps In building an Application
+
+1. Define What your project is.
+2. Define Core Functionalities
+3. Sketch your app (base on Funtionalities)
+4. Plan your apps UI flow (use Flow chart)
+5. Designing a database (base it in functionalities)
+	• Map out data relationaship
+6. Ux Wireframes and UI design
+7. Researching Solutions
+	•Looking at Solutions
+	•Choosing Tools To get Started With
+8. Build The App
+	•CheckList
+		•Build The app Function By Function
+	 •Write Test First
+		•Write Test for your Functions first before coding the feature (How to 			write Test Cases)
+		•Test-Driven Development (TDD)
+	•Use Git/Github
+
+
+Final Tip
+Programmers make mistakes all the time, so don’t feel discouraged when you can’t even pass a test you’ve written or if you’re constantly tripping over yourself. I mean, think about iOS8, Android Lollipop, or some app you love to use. Surely even the most mature apps out there still have bugs, so don’t assume you can build the most perfect, bug-free app out there (of course, this doesn’t mean you should set low standards for yourself — you should always strive to build quality apps).
+In addition, it’s very common for you to spend hours or even days on one thing and to still have difficulty making it work as you want. If programming new features quickly were easy, the world wouldn’t need new programmers. Hell, we’d probably be on a flawless iOS100 now and living in a digitalized world like to one in the Matrix.
+Thus, a lot of times, you’d hear the term “make mistakes” whenever people are encouraging you to start building things. They mean it. One thing you’ll have to accept as a programmer is that you’re not going to be a badass coding machine who can conjure up features in a snap. You’ll going to be failing a lot and that’s ok.
+Again, remember you’re a beginner, so a lot of things are going to be inevitably difficult at first. You’re going to be spending a lot of time on something that you think should be simple and it will seem like a difficult uphill struggle, but as you gain more experience, things will get easier. Look forward to that sense of accomplishment when you finally manage to build your first app.
+
+**Look for CDS bookmark folder for saved articles related to this.**
+
+````````````````````````````````````````````````````````````````````````````````````
+How to make a web app in 12 steps (4 stages)
+
+	**Ideation stage**
+
+1. Source an idea
+
+2. Market research
+
+3. Define functionality
+
+	**Design stage**
+
+4. Sketch your web app
+
+5. Plan your workflow
+
+6. Wireframe the UI
+
+7. Seek early validation
+
+	**Development stage** 
+
+8. Architect your database
+
+9. Develop your frontend
+
+10. Build your backend
+
+	**Launch stage**
+
+11. Host your web app
+
+12. Deploy your web app
+
+
+
+
+
+

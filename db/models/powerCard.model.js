@@ -3,7 +3,12 @@ const Schema = mongoose.Schema;
 
 const PowercardSchema = new Schema({
   key_id: {
-    type: String
+    type: String,
+    required: true
+  },
+  pin: {
+    type: String,
+    required: true
   },
   email: {
     type: String,
@@ -17,7 +22,7 @@ const PowercardSchema = new Schema({
     type: String,
     default: "Inactive"
   },
-  isActive: {
+  isDisabled: {
     type: Boolean,
     default: false
   }
