@@ -21,7 +21,7 @@ const admin = require("./routes/admin");
 const powercard = require("./routes/powerCard");
 const admingallery = require("./routes/adminGal");
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 app.use("/public", express.static("public"));
 
