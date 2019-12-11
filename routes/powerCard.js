@@ -62,31 +62,31 @@ router.get("/list/:id", authenticate, async (req, res) => {
   }
 });
 
-router.post("/edit/:id", authenticate, async (req, res) => {
+router.patch("/edit/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   const body = _.pick(req.body, [
     "key_id",
     "pin",
     "email",
-    "username",
+    "userName",
     "status",
     "isDisabled"
   ]);
 
   try {
-    const editCard = await Powercard.findById(id);
+    const editCard = await Powercard.findOneAndUpdate(
+      {
+        _id: id
+      },
+      { $set: body },
+      { new: true }
+    );
     if (!editCard) {
       res.status(404).json({
         message: "Cannot Find that card"
       });
       return;
     }
-    editCard.key_id = body.key_id;
-    editCard.pin = body.pin;
-    editCard.email = body.email;
-    editCard.username = body.username;
-    editCard.status = body.status;
-    editCard.isDisabled = body.isDisabled;
 
     const finalCard = await editCard.save();
     res.status(200).json({

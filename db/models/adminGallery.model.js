@@ -3,19 +3,19 @@ const Schema = mongoose.Schema;
 
 const adminGalSchema = new Schema({
   postTitle: {
-    type: String,
-    required: true
+    type: String
+    // required: true
   },
   uploadFile: {
     type: Array
   },
   description: {
-    type: String,
-    required: true
+    type: String
+    // required: true
   },
   url: {
-    type: String,
-    required: true
+    type: String
+    // required: true
   },
   date: {
     type: Date,

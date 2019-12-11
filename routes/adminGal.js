@@ -83,7 +83,7 @@ var upload = multer({
 });
 
 router.post("/upload", upload.array("avatar", 6), (req, res, next) => {
-  // console.log(req.body);
+  console.log(req.files);
 
   let body = _.pick(req.body, [
     "postTitle",
@@ -93,18 +93,20 @@ router.post("/upload", upload.array("avatar", 6), (req, res, next) => {
   ]);
   // console.log(body);
   //Adding pictures by Looping
-  // const reqFiles = [];
-  // const url = req.protocol + "://" + req.get("host");
-  // console.log(req.files);
+  const reqFiles = [];
+  const url = req.protocol + "://" + req.get("host");
+
   // for (var i = 0; i < req.files.length; i++) {
   //   reqFiles.push(url + "/public/" + req.files[i].filename);
   // }
+
+  // reqFiles.push(url + "/public/" + req.files.filename);
   // console.log(req.file);
   const admingallery = new adminGal({
     postTitle: body.postTitle,
     description: body.description,
     url: body.url,
-    uploadFile: req.file
+    uploadFile: req.files
   });
 
   admingallery
@@ -115,6 +117,7 @@ router.post("/upload", upload.array("avatar", 6), (req, res, next) => {
         message: "Done upload!",
         userCreated: {
           _id: result._id,
+          data: result,
           uploadFile: result.avatar
         }
       });
