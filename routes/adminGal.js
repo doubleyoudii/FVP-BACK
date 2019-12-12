@@ -82,8 +82,11 @@ var upload = multer({
   }
 });
 
-router.post("/upload", upload.array("avatar", 6), (req, res, next) => {
+// router.post("/upload", upload.array("uploadFile", 6), (req, res, next) => {
+router.post("/upload", upload.single("uploadFile"), (req, res, next) => {
   console.log(req.files);
+  console.log(req.file);
+  console.log(req.uploadFile);
 
   let body = _.pick(req.body, [
     "postTitle",

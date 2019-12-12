@@ -13,7 +13,7 @@ var multer = require("multer");
 
 const app = express();
 app.use(multer({ dest: "./public/" }).single("uploadFile"));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
