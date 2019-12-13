@@ -1,49 +1,11 @@
-// const express = require("express");
-// const router = express.Router();
-
-// const GridFsStorage = require("multer-gridfs-storage");
-// const crypto = require("crypto");
-
-// var multer = require("multer");
-// // var upload = multer({ dest: "uploads/" });
-
-// const storage = new GridFsStorage({
-//   url:process.env.MONGODB_URI,
-//   file: (req, file) => {
-//     return new Promise((resolve, reject) => {
-//       crypto.randomBytes(16, (err, buf) => {
-//         if (err) {
-//           return reject(err)
-//         }
-//         const filename = file.originalname
-//         const fileInfo = {
-//           filename: filename,
-//           bucketName: 'uploads',
-//         }
-//         resolve(fileInfo)
-//       })
-//     })
-//   },
-// })
-
-// const upload = multer({ storage })
-
-// router.post('/', upload.single('img'), (req, res, err) => {
-//   if (err) throw err
-//   res.status(201).send()
-// })
-
-// router.get("/", (req, res) => {
-//   console.log(__dirname);
-//   res.sendFile(__dirname + "/index.html");
-// });
-
 //````````````````````````````````````````````````````````````````````````````````````````````````````
 const express = require("express");
 const multer = require("multer");
 const mongoose = require("mongoose");
 const router = express.Router();
 const _ = require("lodash");
+const fs = require("fs");
+const { ObjectId } = require("mongodb");
 
 const adminGal = require("../db/models/adminGallery.model");
 
@@ -82,47 +44,31 @@ var upload = multer({
   }
 });
 
-// router.post("/upload", upload.array("uploadFile", 6), (req, res, next) => {
-router.post("/upload", upload.single("uploadFile"), (req, res, next) => {
-  console.log(req.files);
-  console.log(req.file);
-  console.log(req.uploadFile);
+//``````````````````````````````````````````````
 
-  let body = _.pick(req.body, [
-    "postTitle",
-    "uploadFile",
-    "description",
-    "url"
-  ]);
-  // console.log(body);
-  //Adding pictures by Looping
-  const reqFiles = [];
-  const url = req.protocol + "://" + req.get("host");
+router.post("/upload", upload.single("uploadFile"), (req, res) => {
+  var img = fs.readFileSync(req.file.path);
+  var encode_image = img.toString("base64");
+  // Define a JSONobject for the image attributes for saving to database
 
-  // for (var i = 0; i < req.files.length; i++) {
-  //   reqFiles.push(url + "/public/" + req.files[i].filename);
-  // }
+  if (!img) {
+    const error = new Error("Please upload a file");
+    error.httpStatusCode = 400;
+    return next(error);
+  }
 
-  // reqFiles.push(url + "/public/" + req.files.filename);
-  // console.log(req.file);
-  const admingallery = new adminGal({
-    postTitle: body.postTitle,
-    description: body.description,
-    url: body.url,
-    uploadFile: req.files
-  });
+  var finalImg = {
+    contentType: req.file.mimetype,
+    image: Buffer.from(encode_image, "base64")
+  };
 
-  admingallery
+  const ffinal = new adminGal(finalImg);
+  ffinal
     .save()
     .then(result => {
       console.log(result);
-      res.status(201).json({
-        message: "Done upload!",
-        userCreated: {
-          _id: result._id,
-          data: result,
-          uploadFile: result.avatar
-        }
+      res.json({
+        data: result
       });
     })
     .catch(err => {
@@ -133,14 +79,47 @@ router.post("/upload", upload.single("uploadFile"), (req, res, next) => {
     });
 });
 
-router.get("/list", (req, res, next) => {
-  console.log(res.body);
-  adminGal.find().then(data => {
-    res.status(200).json({
-      message: "User list retrieved successfully!",
-      users: data
-    });
+// Get all images
+router.get("/images", async (req, res) => {
+  const photos = await adminGal.find();
+  if (photos.length) {
+    const imgArray = photos.map(element => ({
+      ids: element._id
+    }));
+    // console.log(photos);
+    console.log(typeof photos);
+    // console.log(imgArray);
+    // res.send(photos);
+    res.send(imgArray);
+  }
+  // .then((result) => {
+  //   const imgArray = result.map(element => element._id);
+  //   console.log(imgArray);
+  //   if (err) return console.log(err);
+  //   res.send(imgArray);
+  // });
+});
+
+// Get image by id
+router.get("/image/:id", async (req, res) => {
+  var id = req.params.id;
+  adminGal.findOne({ _id: ObjectId(id) }, (err, result) => {
+    if (err) return console.log(err);
+    console.log(result);
+    res.contentType("image/jpeg");
+    res.send(result.image.buffer);
   });
 });
+
+//````````````````````````````````````````````
+// router.get("/list", (req, res, next) => {
+//   console.log(res.body);
+//   adminGal.find().then(data => {
+//     res.status(200).json({
+//       message: "User list retrieved successfully!",
+//       users: data
+//     });
+//   });
+// });
 
 module.exports = router;
