@@ -25,7 +25,7 @@ router.post("/createAdmin", async (req, res) => {
       userName: body.userName,
       password: body.password
     });
-
+    console.log(body);
     const registered = await admin.save();
     res.status(200).json({
       message: "Admin Creation success"

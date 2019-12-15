@@ -46,5 +46,4 @@ AdminSchema.methods.generateAuthToken = function() {
 };
 
 const Admin = mongoose.model("admin", AdminSchema);
-
-module.exports = { Admin };
+module.exports = Admin;

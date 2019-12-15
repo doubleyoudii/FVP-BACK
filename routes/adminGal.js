@@ -7,7 +7,7 @@ const _ = require("lodash");
 const fs = require("fs");
 const { ObjectId } = require("mongodb");
 
-const adminGal = require("../db/models/adminGallery.model");
+const { AdminGallery } = require("../db/models/index");
 
 // Multer File upload settings
 const DIR = "./public/";
@@ -62,7 +62,7 @@ router.post("/upload", upload.single("uploadFile"), (req, res) => {
     image: Buffer.from(encode_image, "base64")
   };
 
-  const ffinal = new adminGal(finalImg);
+  const ffinal = new AdminGallery(finalImg);
   ffinal
     .save()
     .then(result => {
@@ -81,7 +81,7 @@ router.post("/upload", upload.single("uploadFile"), (req, res) => {
 
 // Get all images
 router.get("/images", async (req, res) => {
-  const photos = await adminGal.find();
+  const photos = await AdminGallery.find();
   if (photos.length) {
     const imgArray = photos.map(element => ({
       ids: element._id
@@ -103,7 +103,7 @@ router.get("/images", async (req, res) => {
 // Get image by id
 router.get("/image/:id", async (req, res) => {
   var id = req.params.id;
-  adminGal.findOne({ _id: ObjectId(id) }, (err, result) => {
+  AdminGallery.findOne({ _id: ObjectId(id) }, (err, result) => {
     if (err) return console.log(err);
     console.log(result);
     res.contentType("image/jpeg");

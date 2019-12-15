@@ -23,5 +23,5 @@ const galleryDescSchema = new Schema({
   }
 });
 
-const adminGalleryDesc = mongoose.model("adminGalDesc", adminGalleryDesc);
-module.exports = adminGalleryDesc;
+const AdminGalleryDesc = mongoose.model("adminGalDesc", adminGalleryDesc);
+module.exports = AdminGalleryDesc;

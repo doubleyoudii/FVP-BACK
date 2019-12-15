@@ -29,4 +29,4 @@ const PowercardSchema = new Schema({
 });
 
 const Powercard = mongoose.model("powercard", PowercardSchema);
-module.exports = { Powercard };
+module.exports = Powercard;

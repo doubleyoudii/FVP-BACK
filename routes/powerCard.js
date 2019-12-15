@@ -74,6 +74,9 @@ router.patch("/edit/:id", authenticate, async (req, res) => {
   ]);
 
   try {
+    // if (body.email !== "N/A" && body.userName !== "N/A") {
+
+    // }
     const editCard = await Powercard.findOneAndUpdate(
       {
         _id: id
