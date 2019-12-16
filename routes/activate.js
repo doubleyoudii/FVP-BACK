@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
-
+const jwt = require("jsonwebtoken");
+const { authenticateActivate } = require("../middleware/authentication");
 const { Powercard, DealerRegister } = require("../db/models/index");
 
 router.post("/", async (req, res) => {
@@ -12,7 +13,7 @@ router.post("/", async (req, res) => {
 
     if (preReg.length <= 0) {
       res.status(404).json({
-        message: "Invalid PowerCard Pin"
+        message: "Can't find Power Card or Invalid Power Card Pin"
       });
       return;
     }
@@ -24,9 +25,19 @@ router.post("/", async (req, res) => {
       return;
     }
 
-    res.json({
+    const payload = {
       status: true,
-      data: preReg
+      pin: body.pin
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SALT_ACTIVATE, {
+      expiresIn: "1h"
+    });
+    // return token;
+    res.header("authorizaion", token).json({
+      status: true,
+      data: preReg,
+      token: `Bearer ${token}`
     });
   } catch (error) {
     res.status(400).json({
@@ -54,9 +65,14 @@ router.post("/register/:pin", async (req, res) => {
   try {
     const dealer = new DealerRegister(body);
     const userRegistered = await dealer.save();
-    res.json({ data: userRegistered });
+    res.json({
+      mesage: "Dealer Registration Successful",
+      data: userRegistered
+    });
   } catch (error) {
-    console.log(error);
+    res.status(400).json({
+      error: error
+    });
   }
 });
 
