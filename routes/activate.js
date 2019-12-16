@@ -47,8 +47,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-// router.post("/register/:pin", authenticateActivate, async (req, res) => {
-router.post("/register/:pin", async (req, res) => {
+router.post("/register/:pin", authenticateActivate, async (req, res) => {
+  // router.post("/register/:pin", async (req, res) => {
   const pin = req.params.pin;
   const body = _.pick(req.body, [
     "firstName",

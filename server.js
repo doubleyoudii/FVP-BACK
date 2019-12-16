@@ -21,6 +21,7 @@ const admin = require("./routes/admin");
 const powercard = require("./routes/powerCard");
 const admingallery = require("./routes/adminGal");
 const activate = require("./routes/activate");
+const dealer = require("./routes/dealer");
 
 const port = process.env.PORT || 3000;
 
@@ -30,6 +31,7 @@ app.use("/admin", admin);
 app.use("/powercard", powercard);
 app.use("/admingallery", admingallery);
 app.use("/activate", activate);
+app.use("/dealer", dealer);
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);

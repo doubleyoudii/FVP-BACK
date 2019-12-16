@@ -33,7 +33,7 @@ AdminSchema.statics.findByCredentials = function(userName, password) {
 };
 
 AdminSchema.methods.generateAuthToken = function() {
-  var admin = this;
+  let admin = this;
 
   const payload = {
     email: admin.userName,
