@@ -18,8 +18,8 @@ router.post("/", async (req, res) => {
       return;
     }
 
-    if (preReg.status === "Active") {
-      res.status(404).json({
+    if (preReg[0].status === "Active") {
+      res.status(400).json({
         message: "Pin Already Taken"
       });
       return;
@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
     // return token;
     res.header("authorizaion", token).json({
       status: true,
-      data: preReg,
+      data: preReg[0].pin,
       token: `Bearer ${token}`
     });
   } catch (error) {
@@ -45,10 +45,9 @@ router.post("/", async (req, res) => {
       err: error
     });
   }
-
-  console.log(body.pin);
 });
 
+// router.post("/register/:pin", authenticateActivate, async (req, res) => {
 router.post("/register/:pin", async (req, res) => {
   const pin = req.params.pin;
   const body = _.pick(req.body, [
@@ -65,8 +64,22 @@ router.post("/register/:pin", async (req, res) => {
   try {
     const dealer = new DealerRegister(body);
     const userRegistered = await dealer.save();
+
+    const update = {
+      userName: userRegistered.userName,
+      email: userRegistered.email,
+      status: "Active"
+    };
+
+    const updatePowerCard = await Powercard.findOneAndUpdate(
+      { pin: pin },
+      update,
+      { new: true }
+    );
+
     res.json({
       mesage: "Dealer Registration Successful",
+      pin: pin,
       data: userRegistered
     });
   } catch (error) {
