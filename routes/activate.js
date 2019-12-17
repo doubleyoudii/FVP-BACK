@@ -47,9 +47,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/register/:pin", authenticateActivate, async (req, res) => {
+router.post("/register", authenticateActivate, async (req, res) => {
   // router.post("/register/:pin", async (req, res) => {
-  const pin = req.params.pin;
+  const authdata = req.body.user;
   const body = _.pick(req.body, [
     "firstName",
     "lastName",
@@ -72,15 +72,17 @@ router.post("/register/:pin", authenticateActivate, async (req, res) => {
     };
 
     const updatePowerCard = await Powercard.findOneAndUpdate(
-      { pin: pin },
+      { pin: authdata.pin },
       update,
       { new: true }
     );
 
     res.json({
       mesage: "Dealer Registration Successful",
-      pin: pin,
-      data: userRegistered
+      pin: authdata.pin,
+      data: userRegistered,
+      authdata: authdata,
+      update: updatePowerCard
     });
   } catch (error) {
     res.status(400).json({
