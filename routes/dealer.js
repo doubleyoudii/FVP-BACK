@@ -59,18 +59,13 @@ router.post("/login", async (req, res) => {
 //edit
 
 router.get("/profile", authenticateLogin, async (req, res) => {
-  const id = req.body.user._id;
-  // const id = "5df599132c54fb3b4ce16f74";
-
   try {
+    const id = req.body.user._id;
     const dealer = await DealerRegister.findById(id);
     res.json({
       message: "Get Dealer successful",
       data: dealer
-    })
-    console.log(dealer);
-    
-
+    });
   } catch (error) {
     res.status(400).json({
       message: "Something went wrong. Please try Again"
@@ -78,22 +73,36 @@ router.get("/profile", authenticateLogin, async (req, res) => {
   }
 });
 
-router.patch("/edit/:id", async (req, res) => {
-  const id = req.params.id;
-  const body = _.pick(req.body, [
-    "firstName",
-    "lastName",
-    "email",
-    "middleName",
-    "userName",
-    "password",
-    "contactNumber",
-    "address",
-    "onlineStore"
-  ]);
-  const dealer = await DealerRegister.findByOneAndUpdate({ _id: id }, body, {
-    new: true
-  });
+router.patch("/profile/edit", authenticateLogin, async (req, res) => {
+  try {
+    const id = req.body.user._id;
+
+    const body = _.pick(req.body, [
+      "firstName",
+      "lastName",
+      "email",
+      "middleName",
+      "userName",
+      "password",
+      "contactNumber",
+      "address",
+      "onlineStore"
+    ]);
+
+    const dealer = await DealerRegister.findOneAndUpdate({ _id: id }, body, {
+      new: true
+    });
+
+    res.json({
+      message: "Update Successful",
+      data: dealer
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Something went wrong, Please Try Again!",
+      error: error
+    });
+  }
 
   //wait for GET;
 });
