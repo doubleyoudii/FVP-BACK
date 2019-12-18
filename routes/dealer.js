@@ -57,6 +57,29 @@ router.post("/login", async (req, res) => {
 });
 
 //edit
+router.get("/profile/:userName", async (req, res) => {
+  try {
+    const userName = req.params.userName;
+    const dealer = await DealerRegister.find({ userName: userName });
+    const publicDealer = _.pick(dealer[0], [
+      "firstName",
+      "lastName",
+      "userName",
+      "email",
+      "contactNumber",
+      "address",
+      "onlineStore"
+    ]);
+    res.json({
+      message: "Get Dealer successful by Public",
+      data: publicDealer
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Something went wrong. Please try Again"
+    });
+  }
+});
 
 router.get("/profile", authenticateLogin, async (req, res) => {
   try {
