@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 const Schema = mongoose.Schema;
 
 const bcrypt = require("bcryptjs");
@@ -37,9 +38,6 @@ const dealerSchema = new Schema({
     type: String
   },
   onlineStore: {
-    type: String
-  },
-  powercard_id: {
     type: String
   }
 });
@@ -110,6 +108,8 @@ dealerSchema.methods.generateAuthToken = function() {
   });
   return token;
 };
+
+dealerSchema.plugin(uniqueValidator);
 
 const DealerRegister = mongoose.model("dealerReg", dealerSchema);
 module.exports = DealerRegister;
