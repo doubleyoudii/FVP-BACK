@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { DealerRegister } = require("../db/models/index");
 const _ = require("lodash");
+const nodemailer = require("nodemailer");
 
 router.get("/", (req, res) => {
   res.json({
@@ -35,16 +36,57 @@ router.post("/", async (req, res) => {
     const salt = `${initDealer.password}-${initDealer.dateCreated}`;
     const token = jwt.sign(payload, salt, { expiresIn: "1h" });
 
-    //Send To email!!!!!! look for node Mailer
-    res.send(
-      '<a href="/resetpassword/' +
-        payload.id +
-        "/" +
-        token +
-        '">Reset Password"'
-    );
+    // res.send(
+    //   '<a href="/resetpassword/' +
+    //     payload.id +
+    //     "/" +
+    //     token +
+    //     '">Reset Password"'
+    // );
 
-    //res.json({message: "A Confirmation Link is send to your email. Please Check your email to proceed to the next step"})
+    res.json({
+      message:
+        "A Confirmation Link is send to your email. Please Check your email to proceed to the next step"
+    });
+
+    //Send To email!!!!!! look for node Mailer
+    const mailContent = `
+      <h4>This is the Confirmation link for changing password</h4>
+      <p>Note: This is only a one time confirmation link. If there's a problem occur during the proccess, please send another Link. This Link will expire after 1hr, Thank you</p>
+      <div>
+        <p><a href="http://localhost:3000/resetpassword/${payload.id}/${token}">Redirect to "Reset Password" Page.</p>
+      </div>
+    `;
+
+    async function main() {
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+        host: "smtp.mail.yahoo.com",
+        port: 465,
+        secure: true, // true for 465, false for other ports
+        auth: {
+          user: process.env.USER_EMAIL, // generated ethereal user
+          pass: process.env.USER_PASS // generated ethereal password
+        },
+        tls: {
+          rejectUnauthorized: false
+        }
+      });
+
+      // send mail with defined transport object
+      let info = await transporter.sendMail({
+        from: `"William of Techcellar 👻" <${process.env.USER_EMAIL}>`, // sender address
+        to: `${initDealer.email}`, // list of receivers
+        subject: "Contact form", // Subject line
+        text: "Read Me!", // plain text body
+        html: mailContent // html body
+      });
+
+      console.log("Message sent: %s", info.messageId);
+      // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+    }
+
+    main().catch(console.error);
   } catch (error) {
     res.status(400).json({
       message: "Something went wrong in Processing Reset Password!",
