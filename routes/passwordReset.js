@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jwt-simple");
+const jwt = require("jsonwebtoken");
 const { DealerRegister } = require("../db/models/index");
 const _ = require("lodash");
 
@@ -28,15 +28,12 @@ router.post("/", async (req, res) => {
     };
 
     const date = new Date().getTime().toString();
-    console.log(date);
-    // initDealer.dateCreated = Date.parse(date);
+
     initDealer.dateCreated = date;
     await initDealer.save();
 
     const salt = `${initDealer.password}-${initDealer.dateCreated}`;
-    console.log(salt);
-    const token = jwt.encode(payload, salt, "HS512");
-    console.log(token);
+    const token = jwt.sign(payload, salt, { expiresIn: "1h" });
 
     //Send To email!!!!!! look for node Mailer
     res.send(
@@ -46,13 +43,6 @@ router.post("/", async (req, res) => {
         token +
         '">Reset Password"'
     );
-
-    // res.json({
-    //   date: date,
-    //   secret: salt,
-    //   token: token,
-    //   data: initDealer
-    // });
 
     //res.json({message: "A Confirmation Link is send to your email. Please Check your email to proceed to the next step"})
   } catch (error) {
@@ -76,7 +66,7 @@ router.get("/:id/:token", async (req, res) => {
 
     const salt = `${dealer.password}-${dealer.dateCreated}`;
 
-    const payload = jwt.decode(token, salt, true, "HS512");
+    const payload = jwt.verify(token, salt);
 
     if (
       payload === undefined ||
@@ -88,15 +78,11 @@ router.get("/:id/:token", async (req, res) => {
       });
     }
 
-    // const newDate = new Date().getTime().toString;
-    // dealer.dateCreated = newDate;
-
     res.json({
       id: payload.id,
       token: token
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({
       error: error,
       message: "Something went Wrong. Please Try again!"
@@ -108,53 +94,36 @@ router.post("/changepassword", async (req, res) => {
   const body = _.pick(req.body, ["id", "token", "changePassword"]);
   try {
     const finalDealer = await DealerRegister.findById(body.id);
-    console.log(finalDealer);
+
     if (!finalDealer) {
       return res.status(404).json({
         message: "Incorrect Credentials"
       });
     }
-    console.log(body);
-    console.log(finalDealer.dateCreated);
-    const salt = `${finalDealer.dateCreated}${finalDealer.password}`;
-    console.log("This is saly" + salt);
-    const payload = jwt.decode(body.token, salt, true, "HS512");
-    // const payload = jwtSimple.decode(body.token, salt);
 
-    console.log(payload);
+    const salt = `${finalDealer.password}-${finalDealer.dateCreated}`;
+
+    const payload = jwt.verify(body.token, salt);
+
     const newDate = new Date().getTime().toString();
-    // const changePass = await DealerRegister.findOneAndUpdate(
-    //   { _id: payload.id },
-    //   {
-    //     $set: {
-    //       password: body.changePassword
-    //     }
-    //   },
-    //   { new: true }
-    // );
-    //
-    console.log(payload.id);
+
     DealerRegister.findById(payload.id, async function(err, data) {
       if (err) return res.status(404).json({ message: "User not found!" });
 
       data.password = body.changePassword;
       data.dateCreated = newDate;
       await data.save();
-      console.log(data.dateCreated);
     });
 
     res.json({
-      // data: finalDealer,
-      // data: changePass,
       date: newDate,
       message: "Your password has been successfully changed."
     });
   } catch (error) {
-    console.log(error);
-    // res.status(400).json({
-    //   error: error,
-    //   message: "Something went Wrong. Please Try again!"
-    // });
+    res.status(400).json({
+      error: error,
+      message: "Something went Wrong. Please Try again resetting your Password!"
+    });
   }
 });
 
