@@ -9,7 +9,7 @@ const { authenticateLogin } = require("../middleware/authentication");
 //login
 router.post("/login", async (req, res) => {
   const body = _.pick(req.body, ["email", "password"]);
-  console.log(body);
+  // console.log(body);
   try {
     DealerRegister.findOne({ email: body.email })
       .then(dealer => {
@@ -56,7 +56,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//edit
+//Public profile
 router.get("/profile/:userName", async (req, res) => {
   try {
     const userName = req.params.userName;

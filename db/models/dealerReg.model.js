@@ -39,6 +39,10 @@ const dealerSchema = new Schema({
   },
   onlineStore: {
     type: String
+  },
+  dateCreated: {
+    type: String,
+    default: new Date().getTime()
   }
 });
 
@@ -59,6 +63,22 @@ dealerSchema.pre("save", function(next) {
     });
   });
 });
+
+//this will hash password with the update
+// dealerSchema.pre("update", function(next) {
+//   const password = this.getUpdate().$set.password;
+//   if (!password) {
+//     return next();
+//   }
+//   try {
+//     const salt = bcrypt.genSaltSync();
+//     const hash = bcrypt.hashSync(password, salt);
+//     this.getUpdate().$set.password = hash;
+//     next();
+//   } catch (error) {
+//     return next(error);
+//   }
+// });
 
 dealerSchema.statics.findByCredentials = function(email) {
   let Dealer = this;

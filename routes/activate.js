@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const { authenticateActivate } = require("../middleware/authentication");
 const { Powercard, DealerRegister } = require("../db/models/index");
 
+//Enter PIN for activation
 router.post("/", async (req, res) => {
   const body = _.pick(req.body, ["pin"]);
 
@@ -47,6 +48,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+//Enter user Data if actvation success
 router.post("/register", authenticateActivate, async (req, res) => {
   // router.post("/register/:pin", async (req, res) => {
   const authdata = req.body.user;
