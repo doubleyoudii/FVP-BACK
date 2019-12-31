@@ -7,7 +7,9 @@ const galleryDescSchema = new Schema({
     // required: true
   },
   uploadFile: {
-    type: Array
+    // type: Array
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "adminGallery"
   },
   description: {
     type: String
@@ -23,5 +25,5 @@ const galleryDescSchema = new Schema({
   }
 });
 
-const AdminGalleryDesc = mongoose.model("adminGalDesc", adminGalleryDesc);
+const AdminGalleryDesc = mongoose.model("adminGalDesc", galleryDescSchema);
 module.exports = AdminGalleryDesc;

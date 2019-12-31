@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const jwtSimple = require("jsonwebtoken");
 
 const authenticate = (req, res, next) => {
   //Do something in Token
@@ -81,6 +82,32 @@ const authenticateLogin = (req, res, next) => {
         }
       }
     );
+  } else {
+    res.status(403).json({
+      message: "Forbidden "
+    });
+  }
+  // next();
+};
+
+const authenticateUpload = (req, res, next) => {
+  //Do something in Token
+
+  const bearerHeader = req.header("authorization");
+  if (bearerHeader !== undefined) {
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+    req.body.token = bearerToken;
+
+    const imgData = jwtSimple.decode(req.body.token, "upload");
+    console.log(imgData);
+    if (imgData.id === undefined || imgData.name === undefined) {
+      res.status(403).json({
+        message: "Please Upload imgae Again"
+      });
+    }
+    req.body.imageData = imgData;
+    next();
   } else {
     res.status(403).json({
       message: "Forbidden "

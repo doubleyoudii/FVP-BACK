@@ -5,6 +5,9 @@ const adminGalSchema = new Schema({
   contentType: {
     type: String
   },
+  originalName: {
+    type: String
+  },
   image: {
     type: Buffer
   }

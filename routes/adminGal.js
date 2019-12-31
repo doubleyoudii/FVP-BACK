@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const _ = require("lodash");
 const fs = require("fs");
+const jwtSimple = require("jwt-simple");
 const { ObjectId } = require("mongodb");
 
 const { AdminGallery } = require("../db/models/index");
@@ -27,9 +28,9 @@ const storage = multer.diskStorage({
 
 var upload = multer({
   storage: storage,
-  // limits: {
-  //   fileSize: 1024 * 1024 * 5
-  // },
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
   fileFilter: (req, file, cb) => {
     if (
       file.mimetype == "image/png" ||
@@ -46,37 +47,42 @@ var upload = multer({
 
 //``````````````````````````````````````````````
 
-router.post("/upload", upload.single("uploadFile"), (req, res) => {
-  var img = fs.readFileSync(req.file.path);
-  var encode_image = img.toString("base64");
-  // Define a JSONobject for the image attributes for saving to database
+router.post("/uploadphoto", upload.single("uploadFile"), async (req, res) => {
+  console.log(req.body);
+  try {
+    console.log(req.file);
+    var img = fs.readFileSync(req.file.path);
+    var encode_image = img.toString("base64");
+    // Define a JSONobject for the image attributes for saving to database
 
-  if (!img) {
-    const error = new Error("Please upload a file");
-    error.httpStatusCode = 400;
-    return next(error);
-  }
+    if (!img) {
+      return res.status(400).json({ error: "Please Upload an image file" });
+    }
 
-  var finalImg = {
-    contentType: req.file.mimetype,
-    image: Buffer.from(encode_image, "base64")
-  };
+    var finalImg = {
+      contentType: req.file.mimetype,
+      originalName: req.file.originalname,
+      image: Buffer.from(encode_image, "base64")
+    };
 
-  const ffinal = new AdminGallery(finalImg);
-  ffinal
-    .save()
-    .then(result => {
-      console.log(result);
-      res.json({
-        data: result
-      });
-    })
-    .catch(err => {
-      console.log(err),
-        res.status(500).json({
-          error: err
-        });
+    const ffinal = new AdminGallery(finalImg);
+    const result = await ffinal.save();
+    const payload = {
+      id: result._id,
+      name: result.originalName
+    };
+    const token = jwtSimple.encode(payload, "upload");
+
+    res.header("authorization", token).json({
+      message: "Uploaded successful",
+      data: result
     });
+  } catch (error) {
+    res.status(400).json({
+      message: "Somethings went wrong with the uploading of file",
+      error: error
+    });
+  }
 });
 
 // Get all images
@@ -104,10 +110,16 @@ router.get("/images", async (req, res) => {
 router.get("/image/:id", async (req, res) => {
   var id = req.params.id;
   AdminGallery.findOne({ _id: ObjectId(id) }, (err, result) => {
-    if (err) return console.log(err);
+    if (err)
+      return res.status(400).json({
+        error: err,
+        message: "Image not exists"
+      });
     console.log(result);
     res.contentType("image/jpeg");
-    res.send(result.image.buffer);
+    // res.send(result.image.buffer);
+    let buff = Buffer.from(result.image.buffer, "base64");
+    res.send(buff);
   });
 });
 
