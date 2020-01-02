@@ -3,10 +3,12 @@ const Schema = mongoose.Schema;
 
 const adminGalSchema = new Schema({
   contentType: {
-    type: String
+    type: String,
+    default: "jpeg/png"
   },
   originalName: {
-    type: String
+    type: String,
+    default: Date.now().toString()
   },
   image: {
     type: Buffer

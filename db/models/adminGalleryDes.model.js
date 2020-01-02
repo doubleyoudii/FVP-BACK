@@ -15,7 +15,11 @@ const galleryDescSchema = new Schema({
     type: String
     // required: true
   },
-  uploadFile: imageSchema,
+  uploadFile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "adminGallery"
+  },
+  // imageSchema,
   // uploadFile: {
   //   // type: Array
   //   // type: mongoose.Schema.Types.ObjectId,
