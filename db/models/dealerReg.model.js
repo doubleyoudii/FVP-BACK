@@ -32,7 +32,7 @@ const dealerSchema = new Schema({
     required: true
   },
   contactNumber: {
-    type: Number
+    type: String
   },
   address: {
     type: String
@@ -43,6 +43,10 @@ const dealerSchema = new Schema({
   dateCreated: {
     type: String,
     default: new Date().getTime()
+  },
+  uploadFile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "adminGallery"
   }
 });
 

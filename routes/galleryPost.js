@@ -106,7 +106,7 @@ router.patch("/list/post/edit/:id", authenticate, async (req, res) => {
 
     if (!editPost) {
       res.status(404).json({
-        message: "Cannot Find that card"
+        message: "Cannot Find that Post"
       });
       return;
     }

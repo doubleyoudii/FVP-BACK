@@ -3,7 +3,11 @@ const router = express.Router();
 const _ = require("lodash");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { Powercard, DealerRegister } = require("../db/models/index");
+const {
+  Powercard,
+  DealerRegister,
+  AdminGallery
+} = require("../db/models/index");
 const { authenticateLogin } = require("../middleware/authentication");
 
 //login
@@ -68,7 +72,8 @@ router.get("/profile/:userName", async (req, res) => {
       "email",
       "contactNumber",
       "address",
-      "onlineStore"
+      "onlineStore",
+      "uploadFile"
     ]);
     res.json({
       message: "Get Dealer successful by Public",
@@ -109,12 +114,28 @@ router.patch("/profile/edit", authenticateLogin, async (req, res) => {
       "password",
       "contactNumber",
       "address",
-      "onlineStore"
+      "onlineStore",
+      "uploadFile"
     ]);
 
-    const dealer = await DealerRegister.findOneAndUpdate({ _id: id }, body, {
-      new: true
+    const base64data = body.uploadFile
+      .split(",")
+      .slice(1)
+      .join("");
+    const imageData = new AdminGallery({
+      image: Buffer.from(base64data, "base64")
     });
+
+    await imageData.save();
+    body.uploadFile = imageData._id;
+
+    const dealer = await DealerRegister.findOneAndUpdate(
+      { _id: id },
+      { $set: body },
+      {
+        new: true
+      }
+    );
 
     res.json({
       message: "Update Successful",
