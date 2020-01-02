@@ -21,7 +21,10 @@ router.post("/", async (req, res) => {
       "uploadFile"
     ]);
 
-    const base64data = body.uploadFile.replace(/^data:image\/png;base64,/, "");
+    const base64data = body.uploadFile.replace(
+      /^data:image\/png;base64,/ || /^data:image\/jpeg;base64,/,
+      ""
+    );
     const imageData = new AdminGallery({
       image: Buffer.from(base64data, "base64")
     });
@@ -38,7 +41,7 @@ router.post("/", async (req, res) => {
     const postFinal = await postData.save();
     res.status(200).json({
       message: "Post to gallery successful",
-      data: postData
+      data: postFinal
     });
   } catch (error) {
     res.status(400).json({
