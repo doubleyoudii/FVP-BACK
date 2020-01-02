@@ -4,7 +4,7 @@ const router = express.Router();
 const _ = require("lodash");
 const { AdminGalleryDesc, AdminGallery } = require("../db/models/index");
 
-const { authenticateUpload } = require("../middleware/authentication");
+const { authenticate } = require("../middleware/authentication");
 
 router.get("/", (req, res) => {
   res.json({
@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
   });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authenticate, async (req, res) => {
   try {
     const body = _.pick(req.body, [
       "postTitle",
@@ -84,13 +84,14 @@ router.get("/list/post/:id", async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      message: "Somethings went wrong during the process. Please Try again!",
+      message:
+        "Somethings went wrong during the Fetching of the post. Please Try again!",
       error: error
     });
   }
 });
 
-router.patch("/list/post/edit/:id", async (req, res) => {
+router.patch("/list/post/edit/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   try {
     const body = _.pick(req.body, ["postTitle", "description", "url"]);
@@ -117,42 +118,36 @@ router.patch("/list/post/edit/:id", async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      message: "Something went wrong during the process. Please try Again!",
+      message:
+        "Something went wrong during the updating of the post. Please try Again!",
       error: error
     });
   }
 });
 
-// router.post("/", authenticateUpload, async (req, res) => {
-//   try {
-//     const body = _.pick(req.body, [
-//       "postTitle",
-//       "description",
-//       "url",
-//       "imageData"
-//     ]);
-//     console.log(body);
-//     const postData = new AdminGalleryDesc({
-//       postTitle: body.postTitle,
-//       description: body.description,
-//       url: body.description,
-//       uploadFile: body.imageData
-//     });
+router.delete("/list/delete/:id", authenticate, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const delPost = await AdminGalleryDesc.findByIdAndDelete(id);
+    if (!delPost) {
+      return res.status(404).json({
+        message: "Cannot find that post"
+      });
+    }
 
-//     const finalData = await postData.save();
-//     res.json({
-//       message: "Add Post successful",
-//       data: finalData
-//     });
+    await AdminGallery.findByIdAndDelete(delPost.uploadFile);
 
-//     console.log(postData);
-//   } catch (error) {
-//     res.status(400).json({
-//       message: "Somethings went wrong during the process. Please try again",
-//       error: error
-//     });
-//   }
-
-// });
+    res.status(200).json({
+      message: "Admin Post delete Successful",
+      data: delPost
+    });
+  } catch (error) {
+    res.status(400).json({
+      message:
+        "Somthing went wrong during deletion of the post. Please try again",
+      error: error
+    });
+  }
+});
 
 module.exports = router;
