@@ -100,8 +100,7 @@ const authenticateUpload = (req, res, next) => {
     req.body.token = bearerToken;
 
     const imgData = jwtSimple.decode(req.body.token, "upload");
-    console.log(imgData);
-    if (imgData.id === undefined || imgData.name === undefined) {
+    if (imgData.imageId === undefined || imgData.name === undefined) {
       res.status(403).json({
         message: "Please Upload imgae Again"
       });
@@ -116,4 +115,9 @@ const authenticateUpload = (req, res, next) => {
   // next();
 };
 
-module.exports = { authenticate, authenticateActivate, authenticateLogin };
+module.exports = {
+  authenticate,
+  authenticateActivate,
+  authenticateLogin,
+  authenticateUpload
+};

@@ -1,16 +1,26 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const imageSchema = new Schema({
+  imageId: {
+    type: String
+  },
+  name: {
+    type: String
+  }
+});
+
 const galleryDescSchema = new Schema({
   postTitle: {
     type: String
     // required: true
   },
-  uploadFile: {
-    // type: Array
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "adminGallery"
-  },
+  uploadFile: imageSchema,
+  // uploadFile: {
+  //   // type: Array
+  //   // type: mongoose.Schema.Types.ObjectId,
+  //   // ref: "adminGallery"
+  // },
   description: {
     type: String
     // required: true

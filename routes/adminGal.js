@@ -68,7 +68,7 @@ router.post("/uploadphoto", upload.single("uploadFile"), async (req, res) => {
     const ffinal = new AdminGallery(finalImg);
     const result = await ffinal.save();
     const payload = {
-      id: result._id,
+      imageId: result._id,
       name: result.originalName
     };
     const token = jwtSimple.encode(payload, "upload");
