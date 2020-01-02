@@ -21,10 +21,14 @@ router.post("/", async (req, res) => {
       "uploadFile"
     ]);
 
-    const base64data = body.uploadFile.replace(
-      /^data:image\/png;base64,/ || /^data:image\/jpeg;base64,/,
-      ""
-    );
+    // const base64data = body.uploadFile.replace(
+    //   /^data:image\/png;base64,/ || /^data:image\/jpeg;base64,/,
+    //   ""
+    // );
+    const base64data = body.uploadFile
+      .split(",")
+      .slice(1)
+      .join("");
     const imageData = new AdminGallery({
       image: Buffer.from(base64data, "base64")
     });
