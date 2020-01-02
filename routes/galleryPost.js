@@ -21,10 +21,6 @@ router.post("/", async (req, res) => {
       "uploadFile"
     ]);
 
-    // const base64data = body.uploadFile.replace(
-    //   /^data:image\/png;base64,/ || /^data:image\/jpeg;base64,/,
-    //   ""
-    // );
     const base64data = body.uploadFile
       .split(",")
       .slice(1)
@@ -50,6 +46,78 @@ router.post("/", async (req, res) => {
   } catch (error) {
     res.status(400).json({
       message: "Somethings went wrong during the process. Please try again",
+      error: error
+    });
+  }
+});
+
+//Create public and private version
+router.get("/list/", async (req, res) => {
+  try {
+    const postLists = await AdminGalleryDesc.find();
+    res.status(200).json({
+      message: "Get Admin Post Lists successful",
+      data: postLists
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Somethings went wrong during the Process. Please try Again!",
+      error: error
+    });
+  }
+});
+
+router.get("/list/post/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const specificPost = await AdminGalleryDesc.findById(id);
+
+    if (!specificPost) {
+      res.status(404).json({
+        message: "Post do not exist"
+      });
+    }
+
+    res.status(200).json({
+      message: "Get Post by id success",
+      data: specificPost
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Somethings went wrong during the process. Please Try again!",
+      error: error
+    });
+  }
+});
+
+router.patch("/list/post/edit/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const body = _.pick(req.body, ["postTitle", "description", "url"]);
+
+    const editPost = await AdminGalleryDesc.findByIdAndUpdate(
+      {
+        _id: id
+      },
+      { $set: body },
+      { new: true }
+    );
+
+    if (!editPost) {
+      res.status(404).json({
+        message: "Cannot Find that card"
+      });
+      return;
+    }
+
+    const updatedPost = await editPost.save();
+    res.status(200).json({
+      message: "Updated successful",
+      data: updatedPost
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Something went wrong during the process. Please try Again!",
       error: error
     });
   }
