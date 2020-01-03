@@ -79,7 +79,7 @@ router.get("/profile/:userName", async (req, res) => {
     console.log(publicDealer);
 
     //Test for including the image
-    var id = publicDealer.uploadFile;
+    let id = publicDealer.uploadFile;
     const imageFile = await AdminGallery.findOne({ _id: ObjectId(id) });
 
     let buff;
@@ -105,9 +105,20 @@ router.get("/profile", authenticateLogin, async (req, res) => {
   try {
     const id = req.body.user._id;
     const dealer = await DealerRegister.findById(id);
+
+    //Test for including the image
+    var idImage = dealer.uploadFile;
+    const imageFile = await AdminGallery.findOne({ _id: ObjectId(idImage) });
+
+    let buff;
+    if (imageFile) {
+      buff = Buffer.from(imageFile.image.buffer, "base64");
+    }
+
     res.json({
       message: "Get Dealer successful",
-      data: dealer
+      data: dealer,
+      imageData: buff
     });
   } catch (error) {
     res.status(400).json({

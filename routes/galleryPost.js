@@ -78,9 +78,18 @@ router.get("/list/post/:id", async (req, res) => {
       });
     }
 
+    let idImage = specificPost.uploadFile;
+    const imageFile = await AdminGallery.findOne({ _id: ObjectId(idImage) });
+
+    let buff;
+    if (imageFile) {
+      buff = Buffer.from(imageFile.image.buffer, "base64");
+    }
+
     res.status(200).json({
       message: "Get Post by id success",
-      data: specificPost
+      data: specificPost,
+      imageData: buff
     });
   } catch (error) {
     res.status(400).json({

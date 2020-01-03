@@ -5,11 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("./db/mongoose");
 
-// const GridFsStorage = require("multer-gridfs-storage");
-// const crypto = require('crypto');
-
-var multer = require("multer");
-// var upload = multer({ dest: "uploads/" }).single('file');
+var multer = require("multer"); //we dont need this
 
 const app = express();
 app.use(multer({ dest: "./public/" }).single("uploadFile"));
@@ -17,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
+//Routes
 const admin = require("./routes/admin");
 const powercard = require("./routes/powerCard");
 const admingallery = require("./routes/adminGal");
