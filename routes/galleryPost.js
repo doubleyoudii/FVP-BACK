@@ -75,7 +75,7 @@ router.get("/list/post/:id", async (req, res) => {
     const specificPost = await AdminGalleryDesc.findById(id);
 
     if (!specificPost) {
-      res.status(404).json({
+      return res.status(404).json({
         message: "Post do not exist"
       });
     }
