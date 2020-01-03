@@ -3,6 +3,7 @@ const router = express.Router();
 const _ = require("lodash");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { ObjectId } = require("mongodb");
 const {
   Powercard,
   DealerRegister,
@@ -75,13 +76,27 @@ router.get("/profile/:userName", async (req, res) => {
       "onlineStore",
       "uploadFile"
     ]);
-    res.json({
+    console.log(publicDealer);
+
+    //Test for including the image
+    var id = publicDealer.uploadFile;
+    const imageFile = await AdminGallery.findOne({ _id: ObjectId(id) });
+
+    let buff;
+    if (imageFile) {
+      buff = Buffer.from(imageFile.image.buffer, "base64");
+    }
+
+    res.send({
       message: "Get Dealer successful by Public",
-      data: publicDealer
+      data: publicDealer,
+      imageData: buff
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({
-      message: "Something went wrong. Please try Again"
+      message: "Something went wrong. Please try Get Again",
+      error: error
     });
   }
 });
@@ -96,7 +111,7 @@ router.get("/profile", authenticateLogin, async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      message: "Something went wrong. Please try Again"
+      message: "Something went wrong. Please try GET Again"
     });
   }
 });

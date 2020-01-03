@@ -92,18 +92,11 @@ router.get("/images", async (req, res) => {
     const imgArray = photos.map(element => ({
       ids: element._id
     }));
-    // console.log(photos);
+
     console.log(typeof photos);
-    // console.log(imgArray);
-    // res.send(photos);
+
     res.send(imgArray);
   }
-  // .then((result) => {
-  //   const imgArray = result.map(element => element._id);
-  //   console.log(imgArray);
-  //   if (err) return console.log(err);
-  //   res.send(imgArray);
-  // });
 });
 
 // Get image by id
