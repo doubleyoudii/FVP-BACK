@@ -143,17 +143,24 @@ router.patch("/profile/edit", authenticateLogin, async (req, res) => {
       "onlineStore",
       "uploadFile"
     ]);
+    console.log(body);
+    let base64data;
+    console.log(base64data);
+    if (body.uploadFile) {
+      base64data = body.uploadFile
+        .split(",")
+        .slice(1)
+        .join("");
+    }
 
-    const base64data = body.uploadFile
-      .split(",")
-      .slice(1)
-      .join("");
-    const imageData = new AdminGallery({
-      image: Buffer.from(base64data, "base64")
-    });
+    if (base64data !== undefined) {
+      const imageData = new AdminGallery({
+        image: Buffer.from(base64data, "base64")
+      });
 
-    await imageData.save();
-    body.uploadFile = imageData._id;
+      await imageData.save();
+      body.uploadFile = imageData._id;
+    }
 
     const dealer = await DealerRegister.findOneAndUpdate(
       { _id: id },
@@ -168,6 +175,7 @@ router.patch("/profile/edit", authenticateLogin, async (req, res) => {
       data: dealer
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       message: "Something went wrong, Please Try Again!",
       error: error
