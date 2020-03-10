@@ -54,7 +54,7 @@ router.post("/", async (req, res) => {
       <h4>This is the Confirmation link for changing password</h4>
       <p>Note: This is only a one time confirmation link. If there's a problem occur during the proccess, please send another Link. This Link will expire after 1hr, Thank you</p>
       <div>
-        <p><a href="http://localhost:4200/resetpassword/${payload.id}/${token}">Redirect to "Reset Password" Page.</p>
+        <p><a href="${process.env.DEVELOPMENT}/resetpassword/${payload.id}/${token}">Redirect to "Reset Password" Page.</p>
       </div>
     `;
 

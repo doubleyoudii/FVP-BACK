@@ -1,0 +1,54 @@
+				FVP Features
+
+			***************As an Admin***************
+• I can create Power cards for our dealers to be use.
+	--- Required fields
+	• key_id 
+	• pin
+
+	** This will create records in data base with
+		• key_id
+		• pin
+		• email -- defaults "n/a"
+		• username -- defaults "n/a"
+		• status -- defaults "Inactive" 
+		• isDisabled -- defaults "False"
+
+• I can see the list of cards, its availability, name of card holder and status.
+
+• I can Delete Card in the list 
+
+			***************As a Dealer***************
+
+• I can activate the card that i bought
+	--- Required Fields
+	• Pin
+
+• I can register once i acrivated the card 
+	--- Required Fields
+	• firstName
+	• lastName
+	• middleName
+	• userName
+	• email
+	• password
+	• contactNumber
+	• address
+	• onlineStore
+
+• I can login
+	--- Required Fields
+	• email
+	• password
+
+• I can see my information privately
+• I can share my information tru Common Site
+• I can edit my information
+• I can Change my password
+
+
+``````````````````````````````````````````````````````````````````````
+
+
+
+
