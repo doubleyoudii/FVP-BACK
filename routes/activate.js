@@ -8,7 +8,7 @@ const { Powercard, DealerRegister } = require("../db/models/index");
 //Enter PIN for activation
 router.post("/", async (req, res) => {
   const body = _.pick(req.body, ["pin"]);
-
+  console.log(body);
   try {
     const preReg = await Powercard.find({ pin: body.pin });
 
