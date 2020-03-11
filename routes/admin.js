@@ -38,4 +38,16 @@ router.post("/createAdmin", async (req, res) => {
   }
 });
 
+// router.patch("/changeStatus/:id", async (req, res) => {
+//   try {
+//     const id = req.params.id;
+
+//   } catch (error) {
+//     res.status(400).json({
+//       message: "Unable to change status",
+//       error: error
+//     });
+//   }
+// });
+
 module.exports = router;
