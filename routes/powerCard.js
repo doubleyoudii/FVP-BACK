@@ -84,6 +84,7 @@ router.patch("/edit/:id", authenticate, async (req, res) => {
       { $set: body },
       { new: true }
     );
+
     if (!editCard) {
       res.status(404).json({
         message: "Cannot Find that card"

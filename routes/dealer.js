@@ -37,7 +37,7 @@ router.post("/login", async (req, res) => {
             jwt.sign(
               payload,
               process.env.JWT_SALT_LOGIN,
-              { expiresIn: "1h" },
+              { expiresIn: "5h" },
               (e, token) => {
                 res.header("authorization", token).json({
                   success: true,
